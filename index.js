@@ -32,7 +32,7 @@ function createTimeOutEvent(employee, stamp){
     let timeOut= {
         type:"TimeOut",
         hour: parseInt(stamp.split(' ')[1]),
-        date: stamp.split(' ')[0]
+        date: stamp.split(' ')[0]        
     }
     employee.timeOutEvents.push(timeOut)
     return employee
@@ -71,8 +71,6 @@ function calculatePayroll(array){
     }
     return(totalPayroll)
 }
-
-
 
 
 
