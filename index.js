@@ -38,35 +38,69 @@ function createTimeOutEvent(employee, stamp){
     return employee
 }
 
-function hoursWorkedOnDate(employee, string){    
-    if (employee.timeInEvents[0].date == string){
-        let timeIn = employee.timeInEvents[0].hour
-        let timeOut = employee.timeOutEvents[0].hour
-        let hours= (timeOut-timeIn)/100    
-        return hours 
-    }       
+function hoursWorkedOnDate(employee, string){ 
+    let timeIn = employee.timeInEvents.find(event=>{
+        return event.date===string
+    }).hour
+    let timeOut = employee.timeOutEvents.find(event=>{
+        return event.date===string
+    }).hour
+    let hours= (timeOut-timeIn)/100
+    return hours        
 }
 
-function wagesEarnedOnDate(employee, string){    
+function wagesEarnedOnDate(employee, string){
     return hoursWorkedOnDate(employee, string)*employee.payPerHour       
 }
 
-function allWagesFor(employee){   
-    for (let i = 0; i < employee.timeInEvents.length; i++) {
-        let totalWage = 0 
-        totalWage += wagesEarnedOnDate(employee, employee.timeInEvents[i].date);        
-        return totalWage
-    }    
+function allWagesFor(employee){
+    let totalWage = 0
+    for(let i=0; i <employee.timeOutEvents.length; i++){
+        const wages = (wagesEarnedOnDate(employee, employee.timeOutEvents[i].date))        
+        totalWage += wages
+    }
+    return totalWage    
 }
+
 
 function calculatePayroll(array){
-    for (let i = 0; i < array.length; i++){
-        const wage = allWagesFor(i)
-        let totalPayroll = 0
-        totalPayroll+= wage
-        return totalPayroll
+    let totalPayroll = 0
+    for(let j=[0]; j <array.length; j++){
+        let wage = allWagesFor(array[j])
+        totalPayroll+= wage        
     }
+    return(totalPayroll)
 }
- 
-  
 
+
+
+
+
+
+
+
+
+// function calculatePayroll(array){
+//     let wages = array.reduce((tally, employee)=>{
+//         return tally + allWagesFor(employee)
+//     },0)
+//     return wages    
+// }
+ 
+// for(let i=0; i <employee.timeOutEvents.length-1; i++){
+//     const wages = wagesEarnedOnDate(employee, employee.timeOutEvents[i].date)
+//     let sum = 0
+//     sum+= wages
+//     console.log(wages)
+//     return sum        
+
+// } 
+
+//     let dates = employee.timeInEvents.map(event=>{
+//         return event.date        
+//     })
+//     let total = dates.reduce((tally, date)=>{
+//         return wagesEarnedOnDate(employee, date) + tally
+//     },0) 
+//     return total   
+// }
